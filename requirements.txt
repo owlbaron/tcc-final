@@ -1,0 +1,6 @@
+requests
+pyaudio
+vosk
+numpy
+opencv-python
+google-cloud-speech
