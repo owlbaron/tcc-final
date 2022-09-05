@@ -1,28 +1,58 @@
 """Implementação para reconhecimento de fala usando a API da GCloud."""
+from google.cloud import speech
 from speech_recognition import SpeechRecognition
-# audio = speech.RecognitionAudio(uri=gcs_uri)
-
-# config = speech.RecognitionConfig(
-#     encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-#     sample_rate_hertz=16000,
-#     language_code="en-US",
-# )
-
-# # Detects speech in the audio file
-# response = client.recognize(config=config, audio=audio)
-
-# for result in response.results:
-# print("Transcript: {}".format(result.alternatives[0].transcript))
 
 class GCloud(SpeechRecognition):
     """Essa classe é a implementação de reconhecimento de fala com a ferramenta da GCloud."""
 
-    def start(self) -> None:
-        """Começa a captar o audio."""
+    def __init__(self, language, rate) -> None:
+        super().__init__()
 
-    def stop(self) -> None:
-        """Para de captar o audio"""
+        self.rate = rate
+        self.language = language
+        self.client = speech.SpeechClient()
 
-    def next(self) -> str:
+    def next(self, stream) -> str:
         """Retorna o próximo resultado reconhecido."""
-        
+        audio_generator = stream.generator()
+
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=self.rate,
+            language_code=self.language,
+        )
+        streaming_config = speech.StreamingRecognitionConfig(
+            config=config, interim_results=True
+        )
+
+        request = speech.StreamingRecognizeRequest(streaming_config=streaming_config)
+
+        requests = (
+            speech.StreamingRecognizeRequest(audio_content=content)
+            for content in audio_generator
+        )
+
+        requests.insert(0, request)
+
+        responses = self.client.streaming_recognize(
+            requests,
+        )
+
+        for response in responses:
+            if not response.results:
+                continue
+
+            # The `results` list is consecutive. For streaming, we only care about
+            # the first result being considered, since once it's `is_final`, it
+            # moves on to considering the next utterance.
+            result = response.results[0]
+            if not result.alternatives:
+                continue
+
+            # Display the transcription of the top alternative.
+            transcript = result.alternatives[0].transcript
+
+            if result.is_final:
+                return transcript
+
+        return ""

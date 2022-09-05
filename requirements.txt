@@ -1,4 +1,3 @@
-requests
 pyaudio
 vosk
 numpy

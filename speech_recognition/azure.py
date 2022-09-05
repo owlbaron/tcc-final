@@ -24,11 +24,5 @@ from speech_recognition import SpeechRecognition
 class Azure(SpeechRecognition):
     """Essa classe é a implementação de reconhecimento de fala com a ferramenta da Azure."""
 
-    def start(self) -> None:
-        """Começa a captar o audio."""
-
-    def stop(self) -> None:
-        """Para de captar o audio"""
-
-    def next(self) -> str:
+    def next(self, stream) -> str:
         """Retorna o próximo resultado reconhecido."""
