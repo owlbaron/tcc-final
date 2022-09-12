@@ -1,6 +1,6 @@
 """Implementação para reconhecimento de fala usando a API da GCloud."""
 from google.cloud import speech
-from speech_recognition import SpeechRecognition
+from asr.speech_recognition import SpeechRecognition
 
 class GCloud(SpeechRecognition):
     """Essa classe é a implementação de reconhecimento de fala com a ferramenta da GCloud."""

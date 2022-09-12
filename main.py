@@ -1,10 +1,12 @@
-from speech_recognition.gcloud import GCloud
+"""a"""
+from asr.gcloud import GCloud
 from microphone.microphone import MicrophoneStream
 
 RATE = 16000
 CHUNK = int(RATE / 10)
 
 def main():
+    """a"""
     with MicrophoneStream(RATE, CHUNK) as stream:
         gcloud = GCloud("pt-BR", RATE)
 

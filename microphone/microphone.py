@@ -9,6 +9,8 @@ class MicrophoneStream(object):
     def __init__(self, rate, chunk):
         self._rate = rate
         self._chunk = chunk
+        self._audio_interface = None
+        self._audio_stream = None
 
         # Create a thread-safe buffer of audio data
         self._buff = queue.Queue()
