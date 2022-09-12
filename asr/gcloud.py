@@ -25,16 +25,17 @@ class GCloud(SpeechRecognition):
             config=config, interim_results=True
         )
 
-        request = speech.StreamingRecognizeRequest(streaming_config=streaming_config)
+        # request = speech.StreamingRecognizeRequest(streaming_config=streaming_config)
 
         requests = (
             speech.StreamingRecognizeRequest(audio_content=content)
             for content in audio_generator
         )
 
-        requests.insert(0, request)
+        # requests.insert(0, request)
 
         responses = self.client.streaming_recognize(
+            streaming_config,
             requests,
         )
 
