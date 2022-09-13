@@ -2,7 +2,6 @@
 from multiprocessing.connection import wait
 from platform import win32_edition
 from time import sleep
-from turtle import st
 from asr.gcloud import GCloud
 from asr.lvosk import Vosk
 from microphone.microphone import MicrophoneStream
