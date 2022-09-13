@@ -35,6 +35,7 @@ def test():
     import subprocess
     # import json
     from pywinctl import Win32Window
+    import pyautogui
 
     subprocess.Popen('notepad')
     sleep(0.5)
@@ -49,10 +50,9 @@ def test():
         # if not ret:
             # print("Option not found. Check option path and language")
 
+        im = pyautogui.screenshot("banana.png", region=win.box)
         print(win.topright, win.topleft, win.top, win.width, win.height, win.box)
-        win.moveRel(40, 0)
-        win.minimize()
-        win.restore(True)
+        print(im)
     else:
         print("Window not found. Check application name and language")
 

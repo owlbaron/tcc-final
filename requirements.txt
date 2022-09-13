@@ -2,5 +2,6 @@ pyaudio
 vosk
 numpy
 pywinctl
+pyautogui
 opencv-python
 google-cloud-speech
