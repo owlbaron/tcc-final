@@ -3,5 +3,6 @@ vosk
 numpy
 pywinctl
 pyautogui
+Pillow
 opencv-python
 google-cloud-speech
