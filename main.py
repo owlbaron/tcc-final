@@ -1,4 +1,4 @@
-"""a"""
+"""Arquivo principal, o que deve ser executado."""
 from time import sleep
 from unittest import result
 import pywinctl as pwc
@@ -14,7 +14,7 @@ RATE = 16000
 CHUNK = int(RATE / 10)
 
 def init_main():
-    """a"""
+    """Incializador da entrada por voz"""
     command_map = {
         "cima": "up",
         "baixo": "down",
@@ -40,7 +40,7 @@ def init_main():
                 )
 
 def init_feeder():
-    """a"""
+    """Inicializador do Modelo"""
     darknet_model = DarknetModel(
         cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
         weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
@@ -67,7 +67,8 @@ def init_feeder():
             
 
 def main():
-    """a"""
+    """Função Principal, responsável por executar os diferente módulos e integrá-los"""
+    
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 

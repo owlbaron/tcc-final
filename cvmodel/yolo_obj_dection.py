@@ -11,9 +11,10 @@ from PIL.Image import Image
 
 class DarknetModel():
     """ Responsável por carregar o modelo a partir do arquivo de configuração e os pesos. 
-    :param cfg_path: caminho para o arquivo .cfg do modelo
-    :param weights_path: caminho para o arquivo .weights do modelo
-    :param classes_name: o nome das classes. Precisa estar na mesma ordem que a do treinamento
+    Parâmetros:
+        - cfg_path: caminho para o arquivo .cfg do modelo
+        - weights_path: caminho para o arquivo .weights do modelo
+        - classes_name: o nome das classes. Precisa estar na mesma ordem que a do treinamento
     """
     def __init__(self, cfg_path : Str, weights_path: Str, classes_name: list[Str]) -> None:
         # Load YoloPYT
