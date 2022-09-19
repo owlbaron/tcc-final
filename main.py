@@ -13,8 +13,9 @@ from cvmodel.yolo_obj_dection import DarknetModel
 RATE = 16000
 CHUNK = int(RATE / 10)
 
-def initMain(model):
-    map = {
+def init_main():
+    """a"""
+    command_map = {
         "cima": "up",
         "baixo": "down",
         "esquerda": "left",
@@ -27,30 +28,18 @@ def initMain(model):
         while not stream.closed:
             result = gcloud.next(stream)
 
-            if result in map:
-                pyautogui.press(map[result])
+            result_after_processing = result.lower()
+
+            if result_after_processing in command_map:
+                pyautogui.press(command_map[result_after_processing])
             else:
-                pyautogui.alert(text=f"O comando \"{result}\" é desconhecido ", title='Comando desconhecido', button='OK')
+                pyautogui.alert(
+                    text=f"O comando \"{result_after_processing}\" é desconhecido ",
+                    title='Comando desconhecido',
+                    button='OK',
+                )
 
-def initFeeder(model):  
-    subprocess.Popen('notepad')
-    sleep(0.5)
-    windows = pwc.getWindowsWithTitle('bloco de notas', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
-
-    if windows:
-        win : Win32Window = windows[0]
-
-        win.maximize()
-
-        while True:
-            sleep(0.1)
-            im = pyautogui.screenshot(None, region=win.box)
-
-            model.detect(im)
-
-
-
-def main():
+def init_feeder():
     """a"""
     darknet_model = DarknetModel(
         cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
@@ -58,13 +47,32 @@ def main():
         classes_name= ["battle", "exploration", "menu"]
     )
 
+    subprocess.Popen('mgba-qt')
+    sleep(1)
+    windows = pwc.getWindowsWithTitle('mgba', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
+
+    if windows:
+        win : pwc.Window = windows[0]
+
+        win.maximize()
+
+        while True:
+            sleep(0.1)
+            im = pyautogui.screenshot(None, region=win.box)
+
+            darknet_model.detect(im)
+
+
+
+def main():
+    """a"""
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
-    main = Process(target=initMain, args=(darknet_model))
-    feeder = Process(target=initFeeder, args=(darknet_model))
+    io = Process(target=init_main)
+    feeder = Process(target=init_feeder)
 
-    main.start()
+    io.start()
     feeder.start()
 
 
