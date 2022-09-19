@@ -4,6 +4,7 @@ import numpy as np
 import glob
 import random
 import shutil
+from PIL import Image
 
 
 class DarknetModel():
@@ -19,10 +20,8 @@ class DarknetModel():
         self.layer_names = self.net.getLayerNames()
         self.output_layers = [self.layer_names[i-1] for i in self.net.getUnconnectedOutLayers()]
         
-    def detect(self, img_path):
-        # Loading image
-        img = cv2.imread(img_path)
-        # img = cv2.resize(img, None, fx=0.4, fy=0.4)
+    def detect(self, im: Image):
+        img = np.asarray(im)
         height, width, channels = img.shape
 
         # Detecting objects

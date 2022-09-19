@@ -1,23 +1,71 @@
 """a"""
-import asr.init as asr
-import screenshooter.init as ss
-import cvmodel.init as model
+from time import sleep
+import pywinctl as pwc
+import subprocess
+from pywinctl import Win32Window
+import pyautogui
+from asr.gcloud import GCloud
+from microphone.microphone import MicrophoneStream
 from multiprocessing import Process
 import os
+from cvmodel.yolo_obj_dection import DarknetModel
+
+RATE = 16000
+CHUNK = int(RATE / 10)
+
+def initMain(model):
+    map = {
+        "cima": "up",
+        "baixo": "down",
+        "esquerda": "left",
+        "direita": "right"
+    }
+
+    gcloud = GCloud(language="pt-BR", rate=RATE)
+
+    with MicrophoneStream(RATE, CHUNK) as stream:
+        while not stream.closed:
+            result = gcloud.next(stream)
+
+            if result in map:
+                pyautogui.press(map[result])
+            else:
+                pyautogui.alert(text=f"O comando \"{result}\" é desconhecido ", title='Comando desconhecido', button='OK')
+
+def initFeeder(model):  
+    subprocess.Popen('notepad')
+    sleep(0.5)
+    windows = pwc.getWindowsWithTitle('bloco de notas', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
+
+    if windows:
+        win : Win32Window = windows[0]
+
+        win.maximize()
+
+        while True:
+            sleep(0.1)
+            im = pyautogui.screenshot(None, region=win.box)
+
+            model.detect(im)
+
 
 
 def main():
     """a"""
+    darknet_model = DarknetModel(
+        cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
+        weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
+        classes_name= ["battle", "exploration", "menu"]
+    )
+
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
-    pASR = Process(target=asr.init)
-    pScreenshooter = Process(target=ss.init)
-    pModel = Process(target=model.init)
+    main = Process(target=initMain, args=(darknet_model))
+    feeder = Process(target=initFeeder, args=(darknet_model))
 
-    pASR.start()
-    pScreenshooter.start()
-    pModel.start()
+    main.start()
+    feeder.start()
 
 
 if __name__ == "__main__":
