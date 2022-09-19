@@ -1,5 +1,6 @@
 """a"""
 from time import sleep
+from unittest import result
 import pywinctl as pwc
 import subprocess
 import pyautogui
@@ -43,10 +44,10 @@ def init_feeder():
     darknet_model = DarknetModel(
         cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
         weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
-        classes_name= ["battle", "exploration", "menu"]
+        classes_name= ["attack-change-menu","bag-menu","battle","exploration","fight-attack-menu","fight-bag-menu","fight-main-menu","indicator","map","menu","poke-center-menu","pokemon-selection","yes-no-menu"]
     )
 
-    subprocess.Popen('mgba-qt')
+    # subprocess.Popen('mgba-qt')
     sleep(1)
     windows = pwc.getWindowsWithTitle('mgba', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
 
@@ -56,25 +57,24 @@ def init_feeder():
         win.maximize()
 
         while True:
-            sleep(0.1)
+            sleep(5)
             if not win.isVisible:
                 win.restore()
 
             im = pyautogui.screenshot(None, region=win.box)
-
-            darknet_model.detect(im)
-
-
+    
+            result = darknet_model.detect(im)
+            
 
 def main():
     """a"""
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
-    io = Process(target=init_main)
+    # io = Process(target=init_main)
     feeder = Process(target=init_feeder)
 
-    io.start()
+    # io.start()
     feeder.start()
 
 

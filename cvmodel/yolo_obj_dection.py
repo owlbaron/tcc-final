@@ -1,17 +1,19 @@
 from ast import Str
+from traceback import print_tb
+from unittest import result
 import cv2
 import numpy as np
 import glob
 import random
 import shutil
-from PIL import Image
+from PIL.Image import Image
 
 
 class DarknetModel():
     """ Responsável por carregar o modelo a partir do arquivo de configuração e os pesos. 
-    :param cfg_path : caminho para o arquivo .cfg do modelo
-    :param weights_path : caminho para o arquivo .weights do modelo
-    :param classes_name : o nome das classes. Precisa estar na mesma ordem que a do treinamento
+    :param cfg_path: caminho para o arquivo .cfg do modelo
+    :param weights_path: caminho para o arquivo .weights do modelo
+    :param classes_name: o nome das classes. Precisa estar na mesma ordem que a do treinamento
     """
     def __init__(self, cfg_path : Str, weights_path: Str, classes_name: list[Str]) -> None:
         # Load YoloPYT
@@ -20,7 +22,17 @@ class DarknetModel():
         self.layer_names = self.net.getLayerNames()
         self.output_layers = [self.layer_names[i-1] for i in self.net.getUnconnectedOutLayers()]
         
-    def detect(self, im: Image):
+    def detect(self, im: Image) -> list[tuple[int, str, tuple[int,int,int,int]]]:
+        """
+        Função que recebe uma imagem do tipo Image(PIL) e usa o modelo carregado para 
+        detectar os objetos na tela.
+
+        Parâmetros:
+            - Image: Imagem do tipo Image(PIL)
+
+        Retorno:
+            - Array de objetos reconhecidos: [(class_id, class_name, (box))]
+        """
         img = np.asarray(im)
         height, width, channels = img.shape
 
@@ -29,7 +41,7 @@ class DarknetModel():
 
         self.net.setInput(blob)
         outs = self.net.forward(self.output_layers)
-
+        
         class_ids = []
         confidences = []
         boxes = []
@@ -39,7 +51,8 @@ class DarknetModel():
                 scores = detection[5:]
                 class_id = np.argmax(scores)
                 confidence = scores[class_id]
-                if confidence > 0.3:
+
+                if confidence > 0.1:
                     # Object detected
                     center_x = int(detection[0] * width)
                     center_y = int(detection[1] * height)
@@ -54,9 +67,20 @@ class DarknetModel():
                     labeldata.append([class_id, detection[0], detection[1], detection[2], detection[3]])
                     confidences.append(float(confidence))
                     class_ids.append(class_id)
+        
 
-        for conf in confidences:
-            print(f"class_id: {class_id}; classe: {self.classes[class_id]}; confiança: {conf}")
+        indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.2, 0.4)
+        result = []
+        for i in indexes:
+            box = boxes[i]
+            label = str(self.classes[class_ids[i]])
+            # print(f"class_id: {class_ids[i]}; classe: {label}; confiança: {confidences[i]}")
+            result.append((class_ids[i], label, box))
+
+        return result
+
+        # for conf in confidences:
+        #     print(f"class_id: {class_id}; classe: {self.classes[class_id]}; confiança: {conf}")
 
 
 # # Load YoloPYT
@@ -150,3 +174,9 @@ class DarknetModel():
 #     print(str(img_num) + "/" + str(len(images_path)))
 
 # cv2.destroyAllWindows()
+
+
+
+
+
+#https://learnopencv.com/deep-learning-based-object-detection-using-yolov3-with-opencv-python-c/
