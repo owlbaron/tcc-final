@@ -2,7 +2,6 @@
 from time import sleep
 import pywinctl as pwc
 import subprocess
-from pywinctl import Win32Window
 import pyautogui
 from asr.gcloud import GCloud
 from microphone.microphone import MicrophoneStream
@@ -34,7 +33,7 @@ def init_main():
                 pyautogui.press(command_map[result_after_processing])
             else:
                 pyautogui.alert(
-                    text=f"O comando \"{result_after_processing}\" é desconhecido ",
+                    text=f"O comando \"{result_after_processing}\" é desconhecido.",
                     title='Comando desconhecido',
                     button='OK',
                 )
@@ -58,6 +57,9 @@ def init_feeder():
 
         while True:
             sleep(0.1)
+            if not win.isVisible:
+                win.restore()
+
             im = pyautogui.screenshot(None, region=win.box)
 
             darknet_model.detect(im)
