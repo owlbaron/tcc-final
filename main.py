@@ -1,14 +1,13 @@
 """Arquivo principal, o que deve ser executado."""
 from time import sleep
-from unittest import result
 import pywinctl as pwc
-import subprocess
 import pyautogui
 from asr.gcloud import GCloud
 from microphone.microphone import MicrophoneStream
 from multiprocessing import Process
 import os
 from cvmodel.yolo_obj_dection import DarknetModel
+from vision.state_writer import StateWriter
 
 RATE = 16000
 CHUNK = int(RATE / 10)
@@ -41,6 +40,7 @@ def init_main():
 
 def init_feeder():
     """Inicializador do Modelo"""
+    state_writer = StateWriter()
     darknet_model = DarknetModel(
         cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
         weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
@@ -62,13 +62,14 @@ def init_feeder():
                 win.restore()
 
             im = pyautogui.screenshot(None, region=win.box)
-    
+
             result = darknet_model.detect(im)
-            
+
+            state_writer.write_result(result)
 
 def main():
     """Função Principal, responsável por executar os diferente módulos e integrá-los"""
-    
+
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
