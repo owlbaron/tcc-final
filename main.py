@@ -58,7 +58,7 @@ def init_feeder():
 
         while True:
             sleep(5)
-            if not win.isVisible:
+            if not win.isMinimized:
                 win.restore()
 
             im = pyautogui.screenshot(None, region=win.box)

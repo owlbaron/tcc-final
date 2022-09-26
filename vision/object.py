@@ -13,3 +13,6 @@ class Object:
         self._class_id = class_id
         self._class_name = class_name
         self._box = box
+
+    def __eq__(self, class_id: int) -> bool:
+        return self._class_id == class_id
