@@ -1,15 +1,26 @@
-"""TODO"""
+"""Classe FightAttackMenuContext"""
 from vision.contexts.context import Context
 
 class FightAttackMenuContext(Context):
-    """TODO"""
+    """
+    Contexto que se encontra o jogo no momento.
+
+    Em batalha escolhendo entre os ataques disponíveis.
+    """
+
     def get_valid_tokens(self) -> list[str]:
-        """TODO"""
+        """
+        Retorna os tokens possíveis para esse estado que são os quatro ataques,
+        além de sempre possibilitar os comandos padrões do emulador.
+        """
         default_tokens = self.super.get_valid_tokens()
         return default_tokens.append(["opção 1", "opção 2", "opção 3", "opção 4"])
 
     def get_commands(self, token: str) -> list[str]:
-        """TODO"""
+        """
+        Retorna a os comandos a serem executados de acordo com o token passado, 
+        dado o contexto atual.
+        """
         d = {
             "opção 1": self._select_attack_one,
             "opção 2": self._select_attack_two,
@@ -29,21 +40,53 @@ class FightAttackMenuContext(Context):
     # 
 
     def _select_attack_one(self) -> list[str]:
-        """TODO"""
-        # se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
+        """
+        Seleciona o primeiro ataque. 
+
+        Acha onde está o indicador e realiza os cálculos para selecionar o primeiro ataque.
+
+        Retorno:
+            - Lista de tokens de comando para selecionar o primeiro ataque.
+        """
+
+        # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
         return ["enter"]
 
     def _select_attack_two(self) -> list[str]:
-        """TODO"""
-        # se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
+        """
+        Seleciona o segundo ataque. 
+
+        Acha onde está o indicador e realiza os cálculos para selecionar o segundo ataque.
+
+        Retorno:
+            - Lista de tokens de comando para selecionar o segundo ataque.
+        """
+
+        # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
         return ["down", "enter"]
 
     def _select_attack_three(self) -> list[str]:
-        """TODO"""
-        # se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
+        """
+        Seleciona o terceiro ataque. 
+
+        Acha onde está o indicador e realiza os cálculos para selecionar o terceiro ataque.
+
+        Retorno:
+            - Lista de tokens de comando para selecionar o terceiro ataque.
+        """
+        
+        # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
         return ["down", "down", "enter"]
 
     def _select_attack_four(self) -> list[str]:
-        """TODO"""
-        # se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
+        """
+        Seleciona o quarto ataque. 
+
+        Acha onde está o indicador e realiza os cálculos para selecionar o quarto ataque.
+
+        Retorno:
+            - Lista de tokens de comando para selecionar o quarto ataque.
+        """
+        
+        # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
         return ["down", "down", "down", "enter"]

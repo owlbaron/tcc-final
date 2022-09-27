@@ -39,13 +39,28 @@ class class_ids(Enum):
     POKEMON_SELECTION = 11
     YES_NO_MENU = 12
 
-# Pensar na prioridade de menus/objetos
+# TODO Pensar na prioridade de menus/objetos
 PRIORIDADE = [1, 2]
 
 class ContextFactory:
-    """TODO"""
+    """
+    Padrão de projeto de Factory para gerar os diferentes contextos.
+    """
     def create(self, objects: list[Object]) -> Context:
-        """TODO"""
+        """
+        Gera o contexto atual, será gerado o com maior prioridade.
+
+        Exemplo:
+            - [FightMainMenu, YesNoMenu] -> YesNoMenu
+            Pois o contexto de menu vem por cima de tudo para confirmar algo,
+            logo, tem maior prioridade.
+
+        Parâmetros:
+            - objects: a lista de objetos reconhecidos pelo modelo.
+
+        Retorno:
+            - Context: o Contexto com maior prioridade.
+        """
         objects_sorted = sort_by_priority_list(objects, PRIORIDADE)
         main_object: Object = objects_sorted[0]
         class_id = main_object.get_class_id()
