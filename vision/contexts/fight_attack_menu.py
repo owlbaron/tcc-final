@@ -17,7 +17,7 @@ class FightAttackMenuContext(Context):
         além de sempre possibilitar os comandos padrões do emulador.
         """
         default_tokens = super().get_valid_tokens()
-        return default_tokens.append(["opção 1", "opção 2", "opção 3", "opção 4"])
+        return default_tokens + ["opção 1", "opção 2", "opção 3", "opção 4"]
 
     def get_commands(self, token: str) -> list[str]:
         """
@@ -36,7 +36,7 @@ class FightAttackMenuContext(Context):
 
             return fn()
         else:
-            return self.super.get_commands(token)
+            return super().get_commands(token)
 
     # valida
     # handle
@@ -53,7 +53,7 @@ class FightAttackMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["enter"]
+        return ["x"]
 
     def _select_attack_two(self) -> list[str]:
         """
@@ -66,7 +66,7 @@ class FightAttackMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "enter"]
+        return ["down", "x"]
 
     def _select_attack_three(self) -> list[str]:
         """
@@ -79,7 +79,7 @@ class FightAttackMenuContext(Context):
         """
         
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "down", "enter"]
+        return ["down", "down", "x"]
 
     def _select_attack_four(self) -> list[str]:
         """
@@ -92,4 +92,4 @@ class FightAttackMenuContext(Context):
         """
         
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "down", "down", "enter"]
+        return ["down", "down", "down", "x"]

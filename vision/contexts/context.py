@@ -58,8 +58,8 @@ class Context:
 
     def _select(self) -> list[str]:
         """Retorna o token de comando para selecionar/confirmar"""
-        return ["a"]
+        return ["x"]
 
     def _cancel(self) -> list[str]:
         """Retorna o token de comando para cancelar/voltar"""
-        return ["b"]
+        return ["z"]

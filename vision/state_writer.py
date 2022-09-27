@@ -10,8 +10,8 @@ class StateWriter:
     """
     _state: State
 
-    def __init__(self) -> None:
-        self._state = State()
+    def __init__(self, state: State) -> None:
+        self._state = state
 
     def write_result(self, result: list[tuple[int, str, tuple[int,int,int,int]]]) -> None:
         """

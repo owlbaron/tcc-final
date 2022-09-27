@@ -51,7 +51,8 @@ PRIORIDADE = [
     class_ids.FIGHT_MAIN_MENU.value,
     class_ids.MAP.value,
     class_ids.BATTLE.value, 
-    class_ids.EXPLORATION.value
+    class_ids.EXPLORATION.value,
+    class_ids.INDICATOR.value
 ]
 
 class ContextFactory:
@@ -73,10 +74,15 @@ class ContextFactory:
         Retorno:
             - Context: o Contexto com maior prioridade.
         """
+        print("--- ContextFactory ---")
+        print(f"# objetos encontrados: {len(objects)}")
+        print(f"objetos: {objects}")
         if len(objects) != 0:
             objects_sorted = sort_by_priority_list(objects, PRIORIDADE)
+            print(f"objetos ordenados por prioridade: {objects_sorted}")
             main_object: Object = objects_sorted[0]
             class_id = main_object.get_class_id()
+            print(f"class id do principal: {class_id}")
 
             d: dict[int, Context] = {
                 class_ids.FIGHT_MAIN_MENU.value: FightMainMenuContext(),
@@ -84,7 +90,7 @@ class ContextFactory:
                 class_ids.YES_NO_MENU.value: YesNoMenuContext(),
             }
 
-            if class_id in d:
+            if class_id in d.keys():
                 return d[class_id]
                 
         return Context()

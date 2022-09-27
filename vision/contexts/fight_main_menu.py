@@ -18,7 +18,7 @@ class FightMainMenuContext(Context):
         os comandos padrões do emulador.
         """
         default_tokens = super().get_valid_tokens()
-        return default_tokens.append(["opção 1", "opção 2", "opção 3", "opção 4"])
+        return default_tokens + ["opção 1", "opção 2", "opção 3", "opção 4"]
 
     def get_commands(self, token: str) -> list[str]:
         """
@@ -37,7 +37,7 @@ class FightMainMenuContext(Context):
 
             return fn()
         else:
-            return self.super.get_commands(token)
+            return super().get_commands(token)
 
     # valida
     # handle
@@ -54,7 +54,7 @@ class FightMainMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["enter"]
+        return ["x"]
 
     def _select_pokemon(self) -> list[str]:
         """
@@ -67,7 +67,7 @@ class FightMainMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["right", "enter"]
+        return ["right", "x"]
 
     def _select_item(self) -> list[str]:
         """
@@ -80,7 +80,7 @@ class FightMainMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "enter"]
+        return ["down", "x"]
 
     def _select_run(self) -> list[str]:
         """
@@ -93,4 +93,4 @@ class FightMainMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "right", "enter"]
+        return ["down", "right", "x"]

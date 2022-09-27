@@ -9,6 +9,12 @@ class Object:
     _class_name: str
     _box: tuple[int,int,int,int]
 
+    def __str__(self) -> str:
+        return f"{self._class_name}({self._class_id})"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+
     def __init__(self, class_id: int, class_name: str, box: tuple[int,int,int,int]) -> None:
         self._class_id = class_id
         self._class_name = class_name

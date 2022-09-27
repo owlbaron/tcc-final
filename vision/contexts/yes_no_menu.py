@@ -17,7 +17,7 @@ class YesNoMenuContext(Context):
         além de sempre possibilitar os comandos padrões do emulador.
         """
         default_tokens = super().get_valid_tokens()
-        return default_tokens.append(["sim", "não", "opção 1", "opção 2"])
+        return default_tokens + ["sim", "não", "opção 1", "opção 2"]
 
     def get_commands(self, token: str) -> list[str]:
         """
@@ -31,9 +31,12 @@ class YesNoMenuContext(Context):
             "não": self._select_no_option,
         }
 
-        fn = d[token]
+        if token in d:
+            fn = d[token]
 
-        return fn()
+            return fn()
+        else:
+            return super().get_commands(token)
 
     # valida
     # handle

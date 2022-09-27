@@ -13,8 +13,8 @@ class StateReader:
 
     _state: State
 
-    def __init__(self) -> None:
-        self._state = State()
+    def __init__(self, state: State) -> None:
+        self._state = state
 
     def get_context(self) -> Context:
         """
@@ -23,6 +23,6 @@ class StateReader:
             - O Contexto atual
         """
         objects: list[Object] = self._state.get_objects()
-
+        
         factory = ContextFactory()
         return factory.create(objects)

@@ -1,4 +1,5 @@
 """Arquivo principal, o que deve ser executado."""
+from threading import Thread
 from time import sleep
 import pywinctl as pwc
 import pyautogui
@@ -7,16 +8,24 @@ from microphone.microphone import MicrophoneStream
 from multiprocessing import Process
 import os
 from cvmodel.yolo_obj_dection import DarknetModel
+from vision.state import State
 from vision.state_writer import StateWriter
 from vision.state_reader import StateReader
 
 RATE = 16000
 CHUNK = int(RATE / 10)
 
-def init_main():
+def press(keys, how_long, interval_between_keys):
+    for k in keys:
+        pyautogui.keyDown(k)
+        sleep(how_long)
+        pyautogui.keyUp(k)
+        sleep(interval_between_keys)
+
+def init_main(state: State):
     """Incializador da entrada por voz"""
-    state_reader = StateReader()
-    gcloud = GCloud(language="pt-BR", rate=RATE)
+    state_reader = StateReader(state)
+    gcloud = GCloud(language="pt-BR", rate=RATE) 
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         while not stream.closed:
@@ -28,9 +37,10 @@ def init_main():
             result_after_processing = result.lower()
 
             if result_after_processing in context.get_valid_tokens():
-                with pyautogui.hold(context.get_commands(result_after_processing)):
-                    sleep(1)
-                # pyautogui.press(context.get_commands(result_after_processing), pause=0.5, interval=4)
+                # with pyautogui.hold(context.get_commands(result_after_processing)):
+                #     sleep(1)
+                # pyautogui.press(context.get_commands(result_after_processing), interval=1)
+                press(context.get_commands(result_after_processing), 0.5, 1)
             else:
                 pyautogui.alert(
                     text=f"O comando \"{result_after_processing}\" é desconhecido.",
@@ -38,9 +48,9 @@ def init_main():
                     button='OK',
                 )
 
-def init_feeder():
+def init_feeder(state: State):
     """Inicializador do Modelo"""
-    state_writer = StateWriter()
+    state_writer = StateWriter(state)
     darknet_model = DarknetModel(
         cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
         weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
@@ -52,9 +62,9 @@ def init_feeder():
     windows = pwc.getWindowsWithTitle('mgba', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
 
     if windows:
-        win : pwc.Window = windows[0]
+        win: pwc.Window = windows[0]
 
-        win.maximize()
+        # win.maximize()
 
         while True:
             sleep(5)
@@ -73,8 +83,10 @@ def main():
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
-    io = Process(target=init_main)
-    feeder = Process(target=init_feeder)
+    state = State()
+
+    io = Thread(target=init_main, args=[state])#Process(target=init_main, args=[state])
+    feeder = Thread(target=init_feeder, args=[state])#Process(target=init_feeder, args=[state])
 
     io.start()
     feeder.start()
