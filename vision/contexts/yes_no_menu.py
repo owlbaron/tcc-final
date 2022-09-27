@@ -7,12 +7,16 @@ class YesNoMenuContext(Context):
 
     Escolhendo entre sim ou não.
     """
+
+    def __str__(self):
+        return f"Contexto de seleção de sim ou não (YesNoMenuContext), opçoẽs validas: {self.get_valid_tokens()}"
+
     def get_valid_tokens(self) -> list[str]:
         """
-        Retorna os tokens possíveis para esse estado que são os quatro ataques,
+        Retorna os tokens possíveis para esse estado que são sim e não,
         além de sempre possibilitar os comandos padrões do emulador.
         """
-        default_tokens = self.super.get_valid_tokens()
+        default_tokens = super().get_valid_tokens()
         return default_tokens.append(["sim", "não", "opção 1", "opção 2"])
 
     def get_commands(self, token: str) -> list[str]:

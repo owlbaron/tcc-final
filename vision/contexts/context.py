@@ -8,6 +8,10 @@ class Context:
         - FightAttackMenu: Em batalha escolhendo entre os ataques disponíveis.
         - YesNoMenu: Escolhendo entre sim ou não.
     """
+
+    def __str__(self):
+        return f"Contexto generico (Context), opçoẽs validas: {self.get_valid_tokens()}"
+
     def get_valid_tokens(self) -> list[str]:
         """
         Retorna o conjunto de opções válidas para determinado contexto.

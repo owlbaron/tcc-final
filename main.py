@@ -8,29 +8,29 @@ from multiprocessing import Process
 import os
 from cvmodel.yolo_obj_dection import DarknetModel
 from vision.state_writer import StateWriter
+from vision.state_reader import StateReader
 
 RATE = 16000
 CHUNK = int(RATE / 10)
 
 def init_main():
     """Incializador da entrada por voz"""
-    command_map = {
-        "cima": "up",
-        "baixo": "down",
-        "esquerda": "left",
-        "direita": "right"
-    }
-
+    state_reader = StateReader()
     gcloud = GCloud(language="pt-BR", rate=RATE)
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         while not stream.closed:
             result = gcloud.next(stream)
+            context = state_reader.get_context()
+
+            print(context)
 
             result_after_processing = result.lower()
 
-            if result_after_processing in command_map:
-                pyautogui.press(command_map[result_after_processing])
+            if result_after_processing in context.get_valid_tokens():
+                with pyautogui.hold(context.get_commands(result_after_processing)):
+                    sleep(1)
+                # pyautogui.press(context.get_commands(result_after_processing), pause=0.5, interval=4)
             else:
                 pyautogui.alert(
                     text=f"O comando \"{result_after_processing}\" é desconhecido.",
@@ -58,8 +58,8 @@ def init_feeder():
 
         while True:
             sleep(5)
-            if not win.isMinimized:
-                win.restore()
+            # if not win.isMinimized:
+            #     win.restore()
 
             im = pyautogui.screenshot(None, region=win.box)
 
@@ -73,10 +73,10 @@ def main():
     auth_path = os.path.realpath("gcloud-key.json")
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = auth_path
 
-    # io = Process(target=init_main)
+    io = Process(target=init_main)
     feeder = Process(target=init_feeder)
 
-    # io.start()
+    io.start()
     feeder.start()
 
 

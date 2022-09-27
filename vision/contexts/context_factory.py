@@ -39,8 +39,20 @@ class class_ids(Enum):
     POKEMON_SELECTION = 11
     YES_NO_MENU = 12
 
-# TODO Pensar na prioridade de menus/objetos
-PRIORIDADE = [1, 2]
+PRIORIDADE = [
+    class_ids.YES_NO_MENU.value,
+    class_ids.ATTACK_CHANGE_MENU.value,
+    class_ids.POKEMON_SELECTION.value,
+    class_ids.POKE_CENTER_MENU.value,
+    class_ids.BAG_MENU.value, 
+    class_ids.MENU.value,
+    class_ids.FIGHT_ATTACK_MENU.value,
+    class_ids.FIGHT_BAG_MENU.value,
+    class_ids.FIGHT_MAIN_MENU.value,
+    class_ids.MAP.value,
+    class_ids.BATTLE.value, 
+    class_ids.EXPLORATION.value
+]
 
 class ContextFactory:
     """
@@ -61,17 +73,18 @@ class ContextFactory:
         Retorno:
             - Context: o Contexto com maior prioridade.
         """
-        objects_sorted = sort_by_priority_list(objects, PRIORIDADE)
-        main_object: Object = objects_sorted[0]
-        class_id = main_object.get_class_id()
+        if len(objects) != 0:
+            objects_sorted = sort_by_priority_list(objects, PRIORIDADE)
+            main_object: Object = objects_sorted[0]
+            class_id = main_object.get_class_id()
 
-        d = {
-            class_ids.FIGHT_MAIN_MENU: FightMainMenuContext(),
-            class_ids.FIGHT_ATTACK_MENU: FightAttackMenuContext(),
-            class_ids.YES_NO_MENU: YesNoMenuContext(),
-        }
+            d: dict[int, Context] = {
+                class_ids.FIGHT_MAIN_MENU.value: FightMainMenuContext(),
+                class_ids.FIGHT_ATTACK_MENU.value: FightAttackMenuContext(),
+                class_ids.YES_NO_MENU.value: YesNoMenuContext(),
+            }
 
-        if class_id in d:
-            return d[class_id]
-
+            if class_id in d:
+                return d[class_id]
+                
         return Context()

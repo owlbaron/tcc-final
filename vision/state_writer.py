@@ -23,4 +23,4 @@ class StateWriter:
 
         for item in result:
             class_id, class_name, box = item
-            self._state.add_object(object=Object(class_id, class_name, box))
+            self._state.add_object(Object(class_id, class_name, box))
