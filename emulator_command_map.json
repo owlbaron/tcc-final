@@ -1,0 +1,12 @@
+{
+    "up": "up",
+    "down": "down",
+    "left": "left",
+    "right": "right",
+    "select": "backspace",
+    "start": "enter",
+    "a": "x",
+    "b": "z",
+    "l": "a",
+    "r": "s"
+}

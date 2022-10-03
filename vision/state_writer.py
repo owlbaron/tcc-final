@@ -13,7 +13,7 @@ class StateWriter:
     def __init__(self, state: State) -> None:
         self._state = state
 
-    def write_result(self, result: list[tuple[int, str, tuple[int,int,int,int]]]) -> None:
+    def write_result(self, result: list[tuple[int, str, tuple[float,float,float,float]]]) -> None:
         """
         Responsável por carregar o resultado do modelo no estado.
         Parâmetros:

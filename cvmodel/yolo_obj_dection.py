@@ -23,7 +23,7 @@ class DarknetModel():
         self.layer_names = self.net.getLayerNames()
         self.output_layers = [self.layer_names[i-1] for i in self.net.getUnconnectedOutLayers()]
         
-    def detect(self, im: Image) -> list[tuple[int, str, tuple[int,int,int,int]]]:
+    def detect(self, im: Image) -> list[tuple[int, str, tuple[float,float,float,float]]]:
         """
         Função que recebe uma imagem do tipo Image(PIL) e usa o modelo carregado para 
         detectar os objetos na tela.
@@ -46,7 +46,7 @@ class DarknetModel():
         class_ids = []
         confidences = []
         boxes = []
-        labeldata = []
+        # labeldata = []
         for out in outs:
             for detection in out:
                 scores = detection[5:]
@@ -64,8 +64,9 @@ class DarknetModel():
                     x = int(center_x - w / 2)
                     y = int(center_y - h / 2)
 
-                    boxes.append([x, y, w, h])
-                    labeldata.append([class_id, detection[0], detection[1], detection[2], detection[3]])
+                    # boxes.append([x, y, w, h])
+                    boxes.append([detection[0], detection[1], detection[2], detection[3]])
+                    # labeldata.append([class_id, detection[0], detection[1], detection[2], detection[3]])
                     confidences.append(float(confidence))
                     class_ids.append(class_id)
         

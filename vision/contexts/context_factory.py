@@ -9,7 +9,7 @@ from typing import Iterable, List, TypeVar
 T = TypeVar("T")
 
 #https://www.delenamalan.co.za/til/2020-11-13-sorting-a-list-by-priority-in-python.html#final-solution
-def sort_by_priority_list(values: Iterable[T], priority: List[T]) -> List[T]:
+def sort_by_priority_list(values: Iterable[T], priority: List[int]) -> List[T]:
     """
     Sorts an iterable according to a list of priority items.
     Usage:
@@ -24,7 +24,7 @@ def sort_by_priority_list(values: Iterable[T], priority: List[T]) -> List[T]:
     return sorted(values, key=priority_getter)
 
 
-class class_ids(Enum):
+class ClassIDs(Enum):
     ATTACK_CHANGE_MENU = 0
     BAG_MENU = 1
     BATTLE = 2
@@ -40,19 +40,19 @@ class class_ids(Enum):
     YES_NO_MENU = 12
 
 PRIORIDADE = [
-    class_ids.YES_NO_MENU.value,
-    class_ids.ATTACK_CHANGE_MENU.value,
-    class_ids.POKEMON_SELECTION.value,
-    class_ids.POKE_CENTER_MENU.value,
-    class_ids.BAG_MENU.value, 
-    class_ids.MENU.value,
-    class_ids.FIGHT_ATTACK_MENU.value,
-    class_ids.FIGHT_BAG_MENU.value,
-    class_ids.FIGHT_MAIN_MENU.value,
-    class_ids.MAP.value,
-    class_ids.BATTLE.value, 
-    class_ids.EXPLORATION.value,
-    class_ids.INDICATOR.value
+    ClassIDs.YES_NO_MENU.value,
+    ClassIDs.ATTACK_CHANGE_MENU.value,
+    ClassIDs.POKEMON_SELECTION.value,
+    ClassIDs.POKE_CENTER_MENU.value,
+    ClassIDs.BAG_MENU.value, 
+    ClassIDs.MENU.value,
+    ClassIDs.FIGHT_ATTACK_MENU.value,
+    ClassIDs.FIGHT_BAG_MENU.value,
+    ClassIDs.FIGHT_MAIN_MENU.value,
+    ClassIDs.MAP.value,
+    ClassIDs.BATTLE.value, 
+    ClassIDs.EXPLORATION.value,
+    ClassIDs.INDICATOR.value
 ]
 
 class ContextFactory:
@@ -83,11 +83,14 @@ class ContextFactory:
             main_object: Object = objects_sorted[0]
             class_id = main_object.get_class_id()
             print(f"class id do principal: {class_id}")
+            last_object: Object =  objects_sorted[-1]
+            indicator = last_object if last_object.get_class_id() == ClassIDs.INDICATOR.value else None
+
 
             d: dict[int, Context] = {
-                class_ids.FIGHT_MAIN_MENU.value: FightMainMenuContext(),
-                class_ids.FIGHT_ATTACK_MENU.value: FightAttackMenuContext(),
-                class_ids.YES_NO_MENU.value: YesNoMenuContext(),
+                ClassIDs.FIGHT_MAIN_MENU.value: FightMainMenuContext(indicator),
+                ClassIDs.FIGHT_ATTACK_MENU.value: FightAttackMenuContext(indicator),
+                ClassIDs.YES_NO_MENU.value: YesNoMenuContext(indicator),
             }
 
             if class_id in d.keys():

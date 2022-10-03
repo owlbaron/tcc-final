@@ -4,8 +4,8 @@ from time import sleep
 import pywinctl as pwc
 import pyautogui
 from asr.gcloud import GCloud
+from constants.commands import load_emulator_command_map
 from microphone.microphone import MicrophoneStream
-from multiprocessing import Process
 import os
 from cvmodel.yolo_obj_dection import DarknetModel
 from vision.state import State
@@ -26,6 +26,9 @@ def init_main(state: State):
     """Incializador da entrada por voz"""
     state_reader = StateReader(state)
     gcloud = GCloud(language="pt-BR", rate=RATE) 
+    emulator_cmd_map = load_emulator_command_map("emulator_command_map.json")
+    # windows = pwc.getWindowsWithTitle('mgba', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
+    # win: pwc.Window = windows[0]
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         while not stream.closed:
@@ -35,12 +38,16 @@ def init_main(state: State):
             print(context)
 
             result_after_processing = result.lower()
+            
 
             if result_after_processing in context.get_valid_tokens():
-                # with pyautogui.hold(context.get_commands(result_after_processing)):
-                #     sleep(1)
-                # pyautogui.press(context.get_commands(result_after_processing), interval=1)
-                press(context.get_commands(result_after_processing), 0.5, 1)
+                # win.show(wait=True)
+                # pyautogui.click(win.center)
+                emulator_commands = context.get_commands(result_after_processing)
+
+                keyboard_commands = map(lambda ec: emulator_cmd_map[ec.value], emulator_commands) 
+
+                press(keyboard_commands, 0.5, 1)
             else:
                 pyautogui.alert(
                     text=f"O comando \"{result_after_processing}\" é desconhecido.",
@@ -63,9 +70,7 @@ def init_feeder(state: State):
 
     if windows:
         win: pwc.Window = windows[0]
-
-        # win.maximize()
-
+        win.activate()
         while True:
             sleep(5)
             # if not win.isMinimized:
@@ -74,7 +79,7 @@ def init_feeder(state: State):
             im = pyautogui.screenshot(None, region=win.box)
 
             result = darknet_model.detect(im)
-
+            # print(result)
             state_writer.write_result(result)
 
 def main():

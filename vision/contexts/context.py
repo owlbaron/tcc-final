@@ -1,4 +1,7 @@
 """Classe de contexto do emulador"""
+from constants.commands import EmulatorCommand
+
+
 class Context:
     """
     Contexto que se encontra o jogo no momento.
@@ -18,9 +21,9 @@ class Context:
         Na classe "Context" tem a lista de opções válidas por padrão, 
         como os comandos do emulador.
         """
-        return ["cima", "baixo", "esquerda", "direita", "seleciona", "a", "cancela", "b"]
+        return ["cima", "baixo", "esquerda", "direita", "seleciona", "a", "ok", "cancela", "b", "start"]
 
-    def get_commands(self, token: str) -> list[str]:
+    def get_commands(self, token: str) -> list[EmulatorCommand]:
         """
         Retorna a os comandos a serem executados de acordo com o token passado, 
         dado o contexto atual.
@@ -32,34 +35,39 @@ class Context:
             "direita": self._go_right,
             "seleciona": self._select,
             "a": self._select,
+            "ok": self._select,
             "cancela" : self._cancel,
             "b" : self._cancel,
+            "start": self._start
         }
 
         fn = d[token]
 
         return fn()
 
-    def _go_up(self) -> list[str]:
+    def _go_up(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para cima"""
-        return ["up"]
+        return [EmulatorCommand.UP]
 
-    def _go_down(self) -> list[str]:
+    def _go_down(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para baixo"""
-        return ["down"]
+        return [EmulatorCommand.DOWN]
 
-    def _go_left(self) -> list[str]:
+    def _go_left(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para esquerda"""
-        return ["left"]
+        return [EmulatorCommand.LEFT]
 
-    def _go_right(self) -> list[str]:
+    def _go_right(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para direita"""
-        return ["right"]
+        return [EmulatorCommand.RIGHT]
 
-    def _select(self) -> list[str]:
+    def _select(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para selecionar/confirmar"""
-        return ["x"]
+        return [EmulatorCommand.A]
 
-    def _cancel(self) -> list[str]:
+    def _cancel(self) -> list[EmulatorCommand]:
         """Retorna o token de comando para cancelar/voltar"""
-        return ["z"]
+        return [EmulatorCommand.B]
+
+    def _start(self) -> list[EmulatorCommand]:
+        return [EmulatorCommand.START]

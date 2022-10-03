@@ -1,5 +1,7 @@
 """Classe YesNoMenuContext"""
 from vision.contexts.context import Context
+from vision.object import Object
+from constants.commands import EmulatorCommand
 
 class YesNoMenuContext(Context):
     """
@@ -7,6 +9,9 @@ class YesNoMenuContext(Context):
 
     Escolhendo entre sim ou não.
     """
+    def __init__(self, indicator: Object | None) -> None:
+        super().__init__()
+        self._indicator = indicator
 
     def __str__(self):
         return f"Contexto de seleção de sim ou não (YesNoMenuContext), opçoẽs validas: {self.get_valid_tokens()}"
@@ -19,7 +24,7 @@ class YesNoMenuContext(Context):
         default_tokens = super().get_valid_tokens()
         return default_tokens + ["sim", "não", "opção 1", "opção 2"]
 
-    def get_commands(self, token: str) -> list[str]:
+    def get_commands(self, token: str) -> list[EmulatorCommand]:
         """
         Retorna a os comandos a serem executados de acordo com o token passado, 
         dado o contexto atual.
@@ -42,7 +47,7 @@ class YesNoMenuContext(Context):
     # handle
     # 
 
-    def _select_yes_option(self) -> list[str]:
+    def _select_yes_option(self) -> list[EmulatorCommand]:
         """
         Seleciona o sim
 
@@ -53,9 +58,9 @@ class YesNoMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["enter"]
+        return [EmulatorCommand.A]
 
-    def _select_no_option(self) -> list[str]:
+    def _select_no_option(self) -> list[EmulatorCommand]:
         """
         Seleciona o não
 
@@ -66,4 +71,4 @@ class YesNoMenuContext(Context):
         """
 
         # TODO se tiver entre tal e tal só confirma se nao calcula se tem que subir ou descer
-        return ["down", "enter"]
+        return [EmulatorCommand.DOWN, EmulatorCommand.A]
