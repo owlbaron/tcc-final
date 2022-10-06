@@ -12,7 +12,7 @@ from vision.state import State
 from vision.state_writer import StateWriter
 from vision.state_reader import StateReader
 
-RATE = 16000
+RATE = 48000#16000
 CHUNK = int(RATE / 10)
 
 def press(keys, how_long, interval_between_keys):
@@ -38,7 +38,7 @@ def init_main(state: State):
             print(context)
 
             result_after_processing = result.lower()
-            
+            print(result_after_processing)
 
             if result_after_processing in context.get_valid_tokens():
                 # win.show(wait=True)
@@ -58,9 +58,14 @@ def init_main(state: State):
 def init_feeder(state: State):
     """Inicializador do Modelo"""
     state_writer = StateWriter(state)
+    # darknet_model = DarknetModel(
+    #     cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
+    #     weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
+    #     classes_name= ["attack-change-menu","bag-menu","battle","exploration","fight-attack-menu","fight-bag-menu","fight-main-menu","indicator","map","menu","poke-center-menu","pokemon-selection","yes-no-menu"]
+    # )
     darknet_model = DarknetModel(
-        cfg_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/yolov4-obj.cfg", 
-        weights_path= "/home/miyamoto/projects/tcc/darknet/nosso-yolo/data/backup/yolov4-obj_best.weights",
+        cfg_path= "/home/miyamoto/projects/tccpesos/yolov4-obj.cfg", 
+        weights_path= "/home/miyamoto/projects/tccpesos/backup/yolov4-obj_best.weights",
         classes_name= ["attack-change-menu","bag-menu","battle","exploration","fight-attack-menu","fight-bag-menu","fight-main-menu","indicator","map","menu","poke-center-menu","pokemon-selection","yes-no-menu"]
     )
 
@@ -72,7 +77,7 @@ def init_feeder(state: State):
         win: pwc.Window = windows[0]
         win.activate()
         while True:
-            sleep(5)
+            sleep(1)
             # if not win.isMinimized:
             #     win.restore()
 

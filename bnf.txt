@@ -1,0 +1,19 @@
+pokemon ataque
+pokemon use o primeiro ataque
+ande para cima
+vai pra direita
+seleciona pokemon
+correr
+clique em atacar
+
+FRASE = (SUJEITO?) VERBO |
+        (SUJEITO?) VERBO PREPOSICAO ORDEM SUBSTANTIVO |
+        (SUJEITO?) VERBO_BLAH PREPOSICAO COMANDO |
+        (SUJEITO?) VERBO_BLAH PREPOSICAO VERBO_NO_INFINITIVO
+SUJEITO = pokemon
+VERBO_BLAH = vai, ande, corra, seleciona, use, ataque, clique
+VERBO_NO_INFINITIVO = correr, selecionar, ir, andar, usar, atacar
+ORDEM = primeiro, segundo, terceiro, quarto, primeira, segunda, terceira, quarta
+SUBSTANTIVO = ataque, opção, pokemon, sim, não
+PREPOSICAO = pra, para, o, em
+
