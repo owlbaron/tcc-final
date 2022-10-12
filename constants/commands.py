@@ -1,5 +1,4 @@
 from enum import Enum
-import json
 
 class EmulatorCommand(Enum):
     UP = "up"
@@ -12,10 +11,3 @@ class EmulatorCommand(Enum):
     B = "b"
     L = "l"
     R = "r"
-
-def load_emulator_command_map(file_name: str):
-    #"emulator_commands_map.json"
-    f = open(file_name, "r")
-    cmd_map = json.load(f)
-    f.close()
-    return cmd_map

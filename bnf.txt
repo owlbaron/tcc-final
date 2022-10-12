@@ -7,13 +7,21 @@ correr
 clique em atacar
 
 FRASE = (SUJEITO?) VERBO |
+        (SUJEITO?) VERBO PREPOSICAO DIRECAO |
         (SUJEITO?) VERBO PREPOSICAO ORDEM SUBSTANTIVO |
-        (SUJEITO?) VERBO_BLAH PREPOSICAO COMANDO |
-        (SUJEITO?) VERBO_BLAH PREPOSICAO VERBO_NO_INFINITIVO
-SUJEITO = pokemon
-VERBO_BLAH = vai, ande, corra, seleciona, use, ataque, clique
-VERBO_NO_INFINITIVO = correr, selecionar, ir, andar, usar, atacar
-ORDEM = primeiro, segundo, terceiro, quarto, primeira, segunda, terceira, quarta
-SUBSTANTIVO = ataque, opção, pokemon, sim, não
-PREPOSICAO = pra, para, o, em
+        (SUJEITO?) VERBO ARTIGO_DEFINIDO ORDEM SUBSTANTIVO |
+        (SUJEITO?) VERBO_IMPERATIVO PREPOSICAO VERBO_INFINITIVO |
+        VERBO_IMPERATIVO PREPOSICAO "mochila" |
+        DIRECAO
 
+VERBO = VERBO_INFINITIVO | VERBO_IMPERATIVO
+SUJEITO = pokemon
+VERBO_IMPERATIVO = vai, ande, corra, seleciona, use, clique
+VERBO_INFINITIVO = correr, selecionar, ir, andar, usar, atacar
+ORDEM = primeiro, segundo, terceiro, quarto, primeira, segunda, terceira, quarta
+SUBSTANTIVO = ataque, opção
+ADVERBIO = sim, não
+ARTIGO_DEFINIDO = a, o
+PREPOSICAO = pra, pro, para, em, com
+DIRECAO = cima, baixo, direita e esquerda
+UNKOWN

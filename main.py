@@ -4,7 +4,7 @@ from time import sleep
 import pywinctl as pwc
 import pyautogui
 from asr.gcloud import GCloud
-from constants.commands import load_emulator_command_map
+from utils.load_json import load_json
 from microphone.microphone import MicrophoneStream
 import os
 from cvmodel.yolo_obj_dection import DarknetModel
@@ -26,7 +26,7 @@ def init_main(state: State):
     """Incializador da entrada por voz"""
     state_reader = StateReader(state)
     gcloud = GCloud(language="pt-BR", rate=RATE) 
-    emulator_cmd_map = load_emulator_command_map("emulator_command_map.json")
+    emulator_cmd_map = load_json("emulator_command_map.json")
     # windows = pwc.getWindowsWithTitle('mgba', condition=pwc.Re.CONTAINS, flags=pwc.Re.IGNORECASE)
     # win: pwc.Window = windows[0]
 

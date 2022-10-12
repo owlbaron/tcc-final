@@ -25,7 +25,7 @@ class FightMainMenuContext(Context):
         os comandos padrões do emulador.
         """
         default_tokens = super().get_valid_tokens()
-        return default_tokens + ["opção 1", "opção 2", "opção 3", "opção 4", "lutar","batalhar", "pokemon", "pokémon", "item" , "itens", "fugir", "correr"]
+        return default_tokens + ["opção 1", "opção 2", "opção 3", "opção 4", "lutar", "batalhar", "pokemon", "pokémon", "item" , "itens", "fugir", "correr"]
 
     def get_commands(self, token: str) -> list[EmulatorCommand]:
         """
