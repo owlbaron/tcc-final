@@ -31,6 +31,9 @@ class Lexer:
         self._buffer = buffer
         self._token_dict = load_json("input_token_dict.json")
 
+    def peek(self) -> Token:
+        return self._buffer[0]
+
     def next(self) -> Token:
         """."""
         first = self._buffer.pop(0)
